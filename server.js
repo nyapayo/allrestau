@@ -3,7 +3,7 @@
 ** version 1.0.0
 */
 
-const express = require('express');
+const express = require('express'), cors = require('cors');
 
 const app = express(), port = process.env.PORT || 4000, host = 'localhost';
 
