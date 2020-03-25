@@ -1,53 +1,98 @@
-/*
-** Allrestau app server 
-** version 1.0.0
-*/
-
-const express = require('express'), cors = require('cors'), mysql = require('mysql'), socketIO = require('socket.io'), bodyParser = require('body-parser');
-const http = require('http'), url = require('url');
-
-const app = express(), port = process.env.PORT || 4000, host = 'localhost';
-
-const router = require('./router.js');
-
-let devMode = true;
-
+const http = require('http');
+const express = require('express');
+const app = express();
 const server = http.createServer(app);
+const io = require('socket.io')(server);
+const PORT = process.env.PORT || 4000, host = 'localhost';
+const router = require('./router');
 
-if (!devMode) {
-	app.use(express.static('build'));
-}
+const {addUser, getUser, removeUser, getUsersInRooms} = require('./users');
 
-app.use(cors());
-// For parse application/json
-app.use(bodyParser.json());
-// For parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: true}));
+// install helmet middleware
 
-// Router middleware
+const devMode = true;
+
 app.use(router);
-
-let io = socketIO(server);
-
-io.on('connection', socket => {  
-	socket.on('join', (data, callback) => {
-		data.id = socket.id;
-		console.log(data);
-		// we can use callback here
-	});
-
-	socket.on('disconnect', () => {
-		console.log('a user disconnect', socket.id)
-	})
-})
-
 app.use((req, res, next) => {
-	let err = new Error('There is no path match '+ req.originalUrl);
-	res.send(err.message);
+	req.time = new Date();
+	// pass control to the next middleware
+	next();
+});
+// Gestion des reponses 404
+app.use((req, res, next) => {
+	res.status(404).send('<h3>Sorry can not find that</h3>'+req.originalUrl);
 });
 
-server.listen(port, host, err => {
-	if (!err) {
-		console.log(`Server is running on http://${host}:${port}`);
+// Gestion des erreurs
+
+// logError
+app.use((err, req, res, next) => {
+	console.error(err.stack);
+	next(err);
+});
+// clientErrorHandler 
+app.use((err, req, res, next) => {
+	if (req.xhr) {
+		res.status(500).json({ error: 'Something failed!' });
+	} else {
+		next(err);
 	}
 });
+// error handler
+app.use((err, req, res, next) => {
+	res.status(500);
+	res.json({error: err});
+});
+
+if (!devMode) {
+	// point to restau app after run 'npm run build'
+	// express will serve our static files
+	app.use(express.static(__dirname+'restau/build'));
+}
+
+// Listen for socket connesxion
+io.on('connection', socket => {
+	console.log('New user connected');
+
+	socket.on('join', ({name, room}, callback) => {
+
+		const {error, user} = addUser({id: socket.id, name, room});
+
+		if (error) { return callback(error) }
+
+		console.log(user);
+
+		// Emit a message to the user that join a specific room on the app
+		socket.emit('message', { user: 'admin', text: `${user.name} welcome to room ${user.room}` });
+		// Emit a message to all others users in a room that a user join them in that room except the user that join
+		socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} as joined!` });
+
+		// Add a user in a room
+		socket.join(user.room);
+
+	});
+
+	// Listen to user send message in a room
+	socket.on('sendMessage', (message, callback) => {
+		const user = getUser(socket.id);
+
+		console.log(message+' from'+ user.name);
+
+		// Emit a message to all users in a room include the sender
+		io.to(user.room).emit('message', {user: user.name, text: message});
+
+		callback();
+	})
+
+	socket.on('disconnect', () => {
+		console.log('User disconnected!');
+	});
+
+});
+
+server.listen(PORT, err => {
+	if (!err) {
+		console.log(`Server is running on http://${host}:${PORT}`);
+	}
+})
+
