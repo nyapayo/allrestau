@@ -4,7 +4,7 @@ import './AppInfo.css';
 const AppInfo = props => {
 	return (
 		<div>
-			<h2 className='w3-xxlarge'>C'est quoi Allrestau?</h2>
+			<h2 className='w3-text-blue' id='app-question'>C'est quoi Allrestau?</h2>
 			<p>
 				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 		    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,

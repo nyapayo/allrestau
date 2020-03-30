@@ -28,9 +28,7 @@ const Login = props => {
 								<LoginForm />
 							</div>
 							<div className='w3-col l8 m7 s12 w3-container'>
-								<div style={{marginTop: '7%'}}>
-									<AppInfo />
-								</div>
+								<AppInfo />
 							</div>
 						</div>
 					</div>

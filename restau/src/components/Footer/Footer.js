@@ -12,7 +12,7 @@ const Footer = props => {
 				  if (prevScrollpos > currentScrollPos) {
 				    document.getElementById("app-footer").style.bottom = "0";
 				  } else {
-				    document.getElementById("app-footer").style.bottom = "-50px";
+				    document.getElementById("app-footer").style.bottom = "-100px";
 				  }
 				  prevScrollpos = currentScrollPos;
 			}
@@ -23,7 +23,11 @@ const Footer = props => {
 	});
 	return (
 		<footer className='footer' id='app-footer'>
-			&copy; Allrestau 2020. Tous droits reservés.
+			<p className='w3-opacity'>
+				&copy; Allrestau 2020. 
+				Tel: <a href='tel:+237-676-615-300'>00237676615300</a>. 
+				Email: <a href='mailto:siakajunior1997@gmail.com'>allrestau@support.com</a>
+			</p>
 		</footer>
 	);
 }

@@ -3,7 +3,7 @@ import './LoginForm.css';
 import {Link} from 'react-router-dom';
 import MaterialIcon from 'material-icons-react';
 import { connect } from 'react-redux';
-import { loginEmailChange, loginPasswordChange, loginResterConnecteChange } from '../../actions.js';
+import { loginEmailChange, loginPasswordChange, loginResterConnecteChange, loginShowPassword } from '../../actions.js';
 import $ from 'jquery';
 
 const LoginForm = (props) => {
@@ -23,8 +23,11 @@ const LoginForm = (props) => {
 		}
 	});
 	return (
-		<div className='loginForm'>
+		<div className='loginForm loginForm-shadow'>
 			<form action='' encType='multipart/form-data' method='post' name='loginForm' id='loginForm' className='w3-container' autoComplete='off'>
+				<div className='w3-section'>
+					<h2 className='w3-text-blue'>Connexion</h2>
+				</div>
 				<div className='w3-section'>
 					<label htmlFor='loginEmailInput' className='input-label'>Email</label>
 					<input 
@@ -56,6 +59,22 @@ const LoginForm = (props) => {
 				<div className='w3-section'>
 					<input 
 						type='checkbox' 
+						name='showPassword' 
+						checked={props.showPassword} 
+						onChange={e => {
+							let loginPasswordInput = document.querySelector('#loginPasswordInput');
+							if (loginPasswordInput.type === 'password') loginPasswordInput.type = 'text'
+							else loginPasswordInput.type = 'password'
+							props.loginShowPassword();
+						}} 
+						className='w3-check' 
+						id='showLoginPassword' 
+					/>
+					<label htmlFor='showLoginPassword'> Afficher le mot de passe</label>
+				</div>
+				<div className='w3-section'>
+					<input 
+						type='checkbox' 
 						name='resterConnecte' 
 						value='resterConnecte'
 						checked={props.resterConnecte} 
@@ -75,7 +94,7 @@ const LoginForm = (props) => {
 					<Link to={'/register'} className='w3-text-blue'>
 						Créer un compte
 					</Link> 
-					<span> et faites croitre votre activité.</span>
+					<span> et faites croitre votre chiffre d'affaire.</span>
 				</div>
 			</form>
 			
@@ -87,14 +106,16 @@ const mapStateToProps = state => (
 	{
 		email: state.login.email,
 		password: state.login.password,
-		resterConnecte: state.login.resterConnecte
+		resterConnecte: state.login.resterConnecte,
+		showPassword: state.login.showPassword
 	}
 );
 
 const mapDispatchToProps = {
 	loginEmailChange, 
 	loginPasswordChange, 
-	loginResterConnecteChange
+	loginResterConnecteChange,
+	loginShowPassword
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
