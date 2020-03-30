@@ -1,5 +1,6 @@
 const express = require('express');
 const mysql = require('mysql');
+const formidable = require('formidable');
 
 const router = express.Router();
 
@@ -19,9 +20,16 @@ con.connect(err => {
 	
 });
 
-router.post('/login', (req, res, next) => {
-	console.log('User Login');
-	res.status(200).json({name: 'siaka'});
+router.post('/login_restaurant', (req, res, next) => {
+	let form = new formidable.IncomingForm();
+
+	form.parse(req, (err, fields, files) => {
+
+	});
+});
+
+router.post('/register_restaurant', (req, res, next) => {
+
 });
 
 module.exports = router;

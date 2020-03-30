@@ -1,16 +1,20 @@
 .header {
-	height: 100px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 130px;
 	width: 100%;
-	background-color: #fff;
 	padding: 0 11px;
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: center;
-	justify-content: flex-start;
-	box-shadow: 0 0 5px #989898;
+	justify-content: space-between;
+	z-index: 1;
+	background-color: #fff;
+	box-shadow: 0 0 5px #424242;
 }
 @media only screen and (max-width: 600px) {
 	.header {
-		height: 80px;
+		height: 100px;
 	}
 }

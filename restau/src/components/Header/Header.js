@@ -11,22 +11,27 @@ function Header(props) {
 			ctx.lineJoin = "miter";
 			ctx.lineCap = "square";
 
+			let bloc1 = ctx.createLinearGradient(25, 25, 30, 25);
+			bloc1.addColorStop(0, '#2196F3');
+			bloc1.addColorStop(1, '#e91e63');
+
+			ctx.strokeStyle = bloc1;
 			ctx.moveTo(5, 25);
 			ctx.lineTo(5, 5);
-			ctx.lineTo(50, 5);
-			ctx.strokeStyle = '#2196F3';
+			ctx.lineTo(60, 5);
 			ctx.stroke();
 
-			let bloc2 = ctx.createLinearGradient(70, 45, 115, 45);
-			bloc2.addColorStop(0, '#2196F3');
-			bloc2.addColorStop(1, '#e91e63');
-			ctx.moveTo(70, 45);
+			let bloc2 = ctx.createLinearGradient(70, 5, 115, 45);
+			bloc2.addColorStop(0, '#e91e63');
+			bloc2.addColorStop(1, '#2196F3');
+
+			ctx.strokeStyle = bloc2;
+			ctx.moveTo(60, 45);
 			ctx.lineTo(115, 45);
 			ctx.lineTo(115, 25);
-			ctx.strokeStyle = bloc2;
 			ctx.stroke();
 
-			let titleGradient = ctx.createLinearGradient(5, 5, 100, 45);
+			let titleGradient = ctx.createLinearGradient(5, 5, 110, 45);
 			titleGradient.addColorStop(0, '#2196F3');
 			titleGradient.addColorStop(1, '#e91e63');
 
@@ -42,13 +47,16 @@ function Header(props) {
 		draw('canvas1');
 
 		return () => {
-
+			
 		}
 	});
 	return (
 		<header className='header'>
-			<div>
+			<div className='logo'>
 				<canvas id='canvas1' width='120' height='50' style={{border: '1px solid white', backgroundColor: 'white'}}></canvas>
+			</div>
+			<div className='slogan w3-wide w3-hide-small'>
+				Partageons ensemble!
 			</div>
 		</header>
 	);
