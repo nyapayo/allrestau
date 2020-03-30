@@ -9,4 +9,5 @@
 	align-items: center;
 	justify-content: flex-start;
 	padding: 0 16px;
+	transition: bottom .2s linear 0s;
 }

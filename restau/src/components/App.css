@@ -1,6 +1,7 @@
 .main {
 	position: relative;
 	margin-top: 140px;
+	scroll-behavior: smooth;
 }
 @media only screen and (max-width: 600px) {
 	.main {

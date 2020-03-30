@@ -22,12 +22,16 @@ const Login = props => {
 			<div>
 				<Header {...props} />
 				<div className='main w3-content' style={{maxWidth: '1200px'}} >
-					<div className='w3-row'>
-						<div className='w3-col l4 m6 s12 w3-container'>
-							<LoginForm />
-						</div>
-						<div className='w3-col l8 m6 s12 w3-container'>
-							<AppInfo />
+					<div className='login'>
+						<div className='w3-row'>
+							<div className='w3-col l4 m5 s12 w3-container'>
+								<LoginForm />
+							</div>
+							<div className='w3-col l8 m7 s12 w3-container'>
+								<div style={{marginTop: '7%'}}>
+									<AppInfo />
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
