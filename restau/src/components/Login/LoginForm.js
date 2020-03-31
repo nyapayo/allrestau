@@ -116,6 +116,6 @@ const mapDispatchToProps = {
 	loginPasswordChange, 
 	loginResterConnecteChange,
 	loginShowPassword
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

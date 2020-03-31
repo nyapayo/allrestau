@@ -55,7 +55,7 @@ function Header(props) {
 			<div className='logo'>
 				<canvas id='canvas1' width='120' height='50' style={{border: '1px solid white', backgroundColor: 'white'}}></canvas>
 			</div>
-			<div className='slogan w3-wide w3-hide-small'>
+			<div className='slogan w3-wide' style={{textAlign: 'right'}}>
 				Partageons ensemble!
 			</div>
 		</header>
