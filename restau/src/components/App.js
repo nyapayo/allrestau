@@ -7,6 +7,8 @@ import Login from './Login/Login';
 import Register from './Register/Register';
 import Footer from './Footer/Footer';
 
+import LoginRegister from './LoginRegister/LoginRegister';
+
 // App component
 const App = (props) => {
 
@@ -20,8 +22,8 @@ const App = (props) => {
   return (
     <div className='app'>
       <Switch>
-        <Route exact path={'/'} render={props => <Login {...props} />} />
-        <Route path={'/register'} render={props => <Register {...props} />} />
+        <Route exact path={'/'} render={props => <LoginRegister {...props} />} />
+        <Route path={'/register'} render={props => <LoginRegister {...props} />} />
         <Route path={'/forgotpassword'} render={props => <div>Forgot password</div>} />
         <Route path={'/validatephone'} render={props => <div>Validation</div>} />
         <ProtectedRoute path={'/home'} component={Home} />

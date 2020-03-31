@@ -1,41 +1,143 @@
-import React from 'react';
-import Header from '../Header/Header';
+import React, { useEffect } from 'react';
 import './Login.css';
-import LoginForm from './LoginForm';
-import AppInfo from '../AppInfo/AppInfo';
-import {Redirect, Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import MaterialIcon from 'material-icons-react';
+import { connect } from 'react-redux';
+import { loginEmailChange, loginPasswordChange, loginResterConnecteChange, loginShowPassword } from '../../actions.js';
+import $ from 'jquery';
 
 const Login = props => {
-	// First check for stay logged in
-	// by data set in sessionStorage
-	if (false) {
-		return (
-			<Redirect to={
-				{
-					pathname: '/register',
-					state: props.location
+	useEffect(() => {
+
+		let loginInputs = [$('#loginEmailInput'), $('#loginPasswordInput')];
+
+		function handleLoginInput(e) {
+			if (!e.target.checkValidity()) {
+				if (e.target.validity.valueMissing) {
+					if (e.target.name === 'email') {
+						if (!e.target.classList.contains('w3-border-red')) {
+							e.target.classList.add('w3-border-red');
+						}
+						e.target.nextElementSibling.textContent = 'Adresse mail invalide!';
+					}
+					if (e.target.name === 'password') {
+						if (!e.target.classList.contains('w3-border-red')) {
+							e.target.classList.add('w3-border-red');
+						}
+						e.target.nextElementSibling.textContent = 'Mot de passe requis!';
+					}
 				}
-			} />
-		);
-	} else {
-		return (
-			<div>
-				<Header {...props} />
-				<div className='main w3-content' style={{maxWidth: '1200px'}} >
-					<div className='login'>
-						<div className='w3-row'>
-							<div className='w3-col l4 m5 s12 w3-container'>
-								<LoginForm />
-							</div>
-							<div className='w3-col l8 m7 s12 w3-container'>
-								<AppInfo />
-							</div>
-						</div>
-					</div>
+			} else {
+				if (e.target.classList.contains('w3-border-red')) {
+					e.target.classList.remove('w3-border-red');
+				}
+				e.target.nextElementSibling.textContent = '';
+			}
+		}
+
+		for(let input of loginInputs) {
+			input.on('input', handleLoginInput);
+		}
+
+		return () => {
+			for(let input of loginInputs) {
+				input.off('input', handleLoginInput);
+			}
+		}
+	});
+	return (
+		<div className='loginForm form-shadow'>
+			<form action='' encType='multipart/form-data' method='post' name='loginForm' id='loginForm' className='w3-container' autoComplete='off'>
+				<div className='w3-section'>
+					<h2 className='w3-text-blue'>Connexion</h2>
 				</div>
-			</div>
-		);
-	}
+				<div className='w3-section'>
+					<label htmlFor='loginEmailInput' className='input-label'>Email</label>
+					<input 
+						type='email' 
+						name='email' 
+						value={props.email} 
+						onChange={e => {props.loginEmailChange(e.target.value)}} 
+						className='w3-input w3-border' 
+						id='loginEmailInput' 
+						placeholder='Email' 
+						required 
+					/>
+					<span className='w3-small w3-text-red error'></span>
+				</div>
+				<div className='w3-section'> 
+					<label htmlFor='loginPasswordInput' className='input-label'>Password</label>
+					<input 
+						type='password' 
+						name='password' 
+						value={props.password} 
+						onChange={e => {props.loginPasswordChange(e.target.value)}} 
+						className='w3-input w3-border' 
+						id='loginPasswordInput' 
+						placeholder='Password' 
+						required 
+					/>
+					<span className='w3-small w3-text-red error'></span>
+				</div>
+				<div className='w3-section'>
+					<input 
+						type='checkbox' 
+						name='showPassword' 
+						checked={props.showPassword} 
+						onChange={e => {
+							let loginPasswordInput = document.querySelector('#loginPasswordInput');
+							if (loginPasswordInput.type === 'password') loginPasswordInput.type = 'text'
+							else loginPasswordInput.type = 'password'
+							props.loginShowPassword();
+						}} 
+						className='w3-check' 
+						id='showLoginPassword' 
+					/>
+					<label htmlFor='showLoginPassword'> Afficher le mot de passe</label>
+				</div>
+				<div className='w3-section'>
+					<input 
+						type='checkbox' 
+						name='resterConnecte' 
+						value='resterConnecte'
+						checked={props.resterConnecte} 
+						onChange={e => {props.loginResterConnecteChange(e.target.checked)}} 
+						className='w3-check' 
+						id='loginConnected' 
+					/>
+					<label htmlFor='loginConnected'> Rester connecté</label>
+				</div>
+				<div className='w3-section'>
+					<input type='submit' name='login' value='Connexion' className='w3-button w3-blue w3-hover-blue w3-hover-opacity w3-ripple w3-block' />
+				</div>
+				<div className='w3-section'>
+					<Link to={'/forgotpassword'}>Mot de passe oublié?</Link>
+				</div>
+				<div className='w3-section'>
+					<Link to={'/register'} className='w3-text-blue'>
+						Créer un compte
+					</Link> 
+					<span> et faites croitre votre chiffre d'affaire.</span>
+				</div>
+			</form>		
+		</div>
+	);
 }
 
-export default Login;
+const mapStateToProps = state => (
+	{
+		email: state.login.email,
+		password: state.login.password,
+		resterConnecte: state.login.resterConnecte,
+		showPassword: state.login.showPassword
+	}
+);
+
+const mapDispatchToProps = {
+	loginEmailChange, 
+	loginPasswordChange, 
+	loginResterConnecteChange,
+	loginShowPassword
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

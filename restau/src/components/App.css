@@ -4,6 +4,9 @@
 	margin-top: 146px;
 	scroll-behavior: smooth;
 }
+.form-shadow {
+	box-shadow: 0 0 6px #828282;
+}
 @media only screen and (max-width: 600px) {
 	.main {
 		/* Margin top because of header (100px) on phone screen + 16px */

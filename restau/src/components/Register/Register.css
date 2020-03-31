@@ -1,8 +1,4 @@
-.loginForm {
+.registerForm {
 	background: linear-gradient(to bottom, #ffffff 26%, #99ccff 200%);
 	width: 100%;
-}
-
-.loginForm-shadow {
-	box-shadow: 0 0 6px #828282;
 }

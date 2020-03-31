@@ -1,4 +1,4 @@
-.login {
-	margin-top: 16px;
+.loginForm {
+	background: linear-gradient(to bottom, #ffffff 26%, #99ccff 200%);
+	width: 100%;
 }
-
