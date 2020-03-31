@@ -8,7 +8,7 @@ import Register from '../Register/Register';
 
 const LoginRegister = props => {
 	useEffect(() => {
-		console.log(props)
+		// Make XHR here to get the number of restaurants
 		return () => {
 
 		}

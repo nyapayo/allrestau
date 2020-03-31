@@ -5,43 +5,170 @@ import MaterialIcon from 'material-icons-react';
 import { connect } from 'react-redux';
 import { loginEmailChange, loginPasswordChange, loginResterConnecteChange, loginShowPassword } from '../../actions.js';
 import $ from 'jquery';
+import localforage from 'localforage';
 
 const Login = props => {
+
+	async function loginRestaurant(url) {
+		try {
+			const httpResp = await fetch(url, { method: 'post', body: new FormData(document.forms.loginForm) });
+			return await httpResp.json();
+		} catch(err) {
+			// Dispatch some error action here
+			console.log('Erreur de connexion au serveur');
+		}
+	}
+
 	useEffect(() => {
+
+		let loginForm = document.forms.loginForm, loginButton = document.querySelector('#loginButton');
+
+		let loginEmailInput = document.querySelector('#loginEmailInput'), loginPasswordInput = document.querySelector('#loginPasswordInput');
+
+		loginForm.onsubmit = e => {
+			e.preventDefault();
+			if (!loginEmailInput.validity.valid) {
+				loginEmailInput.nextElementSibling.textContent = 'Email invalide.';
+				if (!loginEmailInput.classList.contains('w3-border-red')) {
+					loginEmailInput.classList.add('w3-border-red');
+				}
+				return;
+			}
+			if (!loginPasswordInput.validity.valid) {
+				loginPasswordInput.nextElementSibling.textContent = 'Mot de passe requis.';
+				if (!loginPasswordInput.classList.contains('w3-border-red')) {
+					loginPasswordInput.classList.add('w3-border-red');
+				}
+				return;
+			}
+
+			// Email and password are correct
+			
+			// Check if user want to stay logged in
+			if (props.resterConnecte) {
+				console.log('resterConnecte');
+			}
+		}
+
+		loginForm.onkeyup = e => {
+			if (e.key === 'Enter') {
+				// Want to submit
+				// check all inputs
+				if (!loginEmailInput.value) {
+					loginEmailInput.nextElementSibling.textContent = 'Email requis.';
+					if (!loginEmailInput.classList.contains('w3-border-red')) {
+						loginEmailInput.classList.add('w3-border-red');
+					}
+				}
+				if (!loginPasswordInput.value) {
+					loginPasswordInput.nextElementSibling.textContent = 'Mot de passe requis.';
+					if (!loginPasswordInput.classList.contains('w3-border-red')) {
+						loginPasswordInput.classList.add('w3-border-red');
+					}
+				}
+				if (!loginEmailInput.checkValidity()) {
+					loginEmailInput.nextElementSibling.textContent = 'Email invalide.';
+					if (!loginEmailInput.classList.contains('w3-border-red')) {
+						loginEmailInput.classList.add('w3-border-red');
+					}
+				}
+			}
+		}
+
+		loginButton.onclick = e => {
+			if (!loginEmailInput.value) {
+				loginEmailInput.nextElementSibling.textContent = 'Email requis.';
+				if (!loginEmailInput.classList.contains('w3-border-red')) {
+					loginEmailInput.classList.add('w3-border-red');
+				}
+			}
+			if (!loginPasswordInput.value) {
+				loginPasswordInput.nextElementSibling.textContent = 'Mot de passe requis.';
+				if (!loginPasswordInput.classList.contains('w3-border-red')) {
+					loginPasswordInput.classList.add('w3-border-red');
+				}
+			}
+			if (!loginEmailInput.checkValidity()) {
+				loginEmailInput.nextElementSibling.textContent = 'Email invalide.';
+				if (!loginEmailInput.classList.contains('w3-border-red')) {
+					loginEmailInput.classList.add('w3-border-red');
+				}
+			}
+		}
 
 		let loginInputs = [$('#loginEmailInput'), $('#loginPasswordInput')];
 
-		function handleLoginInput(e) {
-			if (!e.target.checkValidity()) {
-				if (e.target.validity.valueMissing) {
-					if (e.target.name === 'email') {
-						if (!e.target.classList.contains('w3-border-red')) {
-							e.target.classList.add('w3-border-red');
-						}
-						e.target.nextElementSibling.textContent = 'Adresse mail invalide!';
+		function handleLoginFocus(e) {
+			e.target.placeholder = '';
+		}
+
+		function handleLoginBlur(e) {
+			if (!e.target.value) {
+				// Login email input blur
+				if (e.target.name === 'email') {
+					e.target.nextElementSibling.textContent = 'Email requis.';
+					if (!e.target.classList.contains('w3-border-red')) {
+						e.target.classList.add('w3-border-red');
 					}
-					if (e.target.name === 'password') {
-						if (!e.target.classList.contains('w3-border-red')) {
-							e.target.classList.add('w3-border-red');
-						}
-						e.target.nextElementSibling.textContent = 'Mot de passe requis!';
+				}
+				// Login password input blur
+				if (e.target.name === 'password') {
+					e.target.nextElementSibling.textContent = 'Mot de passe requis.';
+					if (!e.target.classList.contains('w3-border-red')) {
+						e.target.classList.add('w3-border-red');
 					}
 				}
 			} else {
+				e.target.nextElementSibling.textContent = '';
 				if (e.target.classList.contains('w3-border-red')) {
 					e.target.classList.remove('w3-border-red');
 				}
+			}
+
+			// Gestion placeholder
+			if (e.target.name === 'email') {
+				e.target.placeholder = 'Email';
+			}
+			if (e.target.name === 'password') {
+				e.target.placeholder = 'Password';
+			}
+		}
+
+		function handleLoginInput(e) {
+			if (e.target.value) {
 				e.target.nextElementSibling.textContent = '';
+				if (e.target.classList.contains('w3-border-red')) {
+					e.target.classList.remove('w3-border-red');
+				}
+			} else {
+				if (e.target.name === 'email') {
+					e.target.nextElementSibling.textContent = 'Email requis.';
+					if (!e.target.classList.contains('w3-border-red')) {
+						e.target.classList.add('w3-border-red');
+					}
+				}
+				if (e.target.name === 'password') {
+					e.target.nextElementSibling.textContent = 'Mot de passe requis.';
+					if (!e.target.classList.contains('w3-border-red')) {
+						e.target.classList.add('w3-border-red');
+					}
+				}
 			}
 		}
 
 		for(let input of loginInputs) {
-			input.on('input', handleLoginInput);
+			input.on({
+				'input': handleLoginInput,
+				'focus': handleLoginFocus,
+				'blur': handleLoginBlur
+			});
 		}
 
 		return () => {
 			for(let input of loginInputs) {
 				input.off('input', handleLoginInput);
+				input.off('focus', handleLoginFocus);
+				input.off('blur', handleLoginBlur)
 			}
 		}
 	});
@@ -62,6 +189,7 @@ const Login = props => {
 						id='loginEmailInput' 
 						placeholder='Email' 
 						required 
+						autoComplete='on'
 					/>
 					<span className='w3-small w3-text-red error'></span>
 				</div>
@@ -77,9 +205,7 @@ const Login = props => {
 						placeholder='Password' 
 						required 
 					/>
-					<span className='w3-small w3-text-red error'></span>
-				</div>
-				<div className='w3-section'>
+					<span className='w3-small w3-text-red error'></span> <br />
 					<input 
 						type='checkbox' 
 						name='showPassword' 
@@ -108,7 +234,7 @@ const Login = props => {
 					<label htmlFor='loginConnected'> Rester connecté</label>
 				</div>
 				<div className='w3-section'>
-					<input type='submit' name='login' value='Connexion' className='w3-button w3-blue w3-hover-blue w3-hover-opacity w3-ripple w3-block' />
+					<input type='submit' name='login' value='Connexion' className='w3-button w3-blue w3-hover-blue w3-hover-opacity w3-ripple w3-block' id='loginButton' />
 				</div>
 				<div className='w3-section'>
 					<Link to={'/forgotpassword'}>Mot de passe oublié?</Link>

@@ -15,21 +15,31 @@ con.connect(err => {
 	if (err) {
 		throw new Error(err);
 	}
-	console.log('connected');
+	console.log('connected to database!');
 	// Make query here!
 	
 });
 
-router.post('/login_restaurant', (req, res, next) => {
+router.get('/', (req, res, next) => {
+	console.log('Server root');
+	res.end();
+});
+
+router.post('/loginrestaurant', (req, res, next) => {
 	let form = new formidable.IncomingForm();
 
 	form.parse(req, (err, fields, files) => {
-
+		
 	});
 });
 
-router.post('/register_restaurant', (req, res, next) => {
+router.post('/registerrestaurant', (req, res, next) => {
 
+});
+
+router.get('/getnumberrestaurant', (req, res, next) => {
+	console.log('getnumberrestaurant');
+	res.status(200).json({nb: 400});
 });
 
 module.exports = router;

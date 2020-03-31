@@ -3,10 +3,7 @@ import './App.css';
 import Home from './Home/Home';
 import ProtectedRoute from './ProtectedRoute/ProtectedRoute';
 import {Switch, Route} from 'react-router-dom';
-import Login from './Login/Login';
-import Register from './Register/Register';
 import Footer from './Footer/Footer';
-
 import LoginRegister from './LoginRegister/LoginRegister';
 
 // App component

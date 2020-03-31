@@ -1,4 +1,12 @@
-import { LOGIN_EMAIL_CHANGE, LOGIN_PASSWORD_CHANGE, LOGIN_RESTER_CONNECTE_CHANGE, LOGIN_SHOW_PASSWORD } from './actions';
+import { 
+	LOGIN_EMAIL_CHANGE, 
+	LOGIN_PASSWORD_CHANGE, 
+	LOGIN_RESTER_CONNECTE_CHANGE, 
+	LOGIN_SHOW_PASSWORD,
+	FETCH_NUMBER_RESTAURANT_BEGIN,
+	FETCH_NUMBER_RESTAURANT_SUCCESS,
+	FETCH_NUMBER_RESTAURANT_ERROR 
+} from './actions';
 
 const initialState = {
 	login: {
@@ -6,9 +14,9 @@ const initialState = {
 		password: '',
 		resterConnecte: true,
 		showPassword: false,
-		isLoggin: false, // While trying to login
 		error: '' // server error
-	}
+	},
+	nbRestau: ''
 }
 
 const reducer = (state=initialState, action) => {
@@ -42,7 +50,7 @@ const reducer = (state=initialState, action) => {
   	  	}
   	  }
 
-  	 case LOGIN_SHOW_PASSWORD:
+  	case LOGIN_SHOW_PASSWORD:
   	 	return {
   	 		...state,
   	 		login: {
@@ -50,6 +58,24 @@ const reducer = (state=initialState, action) => {
   	 			showPassword: !state.login.showPassword
   	 		}
   	 	}
+
+  	case FETCH_NUMBER_RESTAURANT_BEGIN:
+  		return {
+  			...state,
+  			nbRestau: 5
+  		}
+
+  	case FETCH_NUMBER_RESTAURANT_SUCCESS:
+  		return {
+  			...state,
+  			nbRestau: 100
+  		}
+
+  	case FETCH_NUMBER_RESTAURANT_ERROR:
+  		return {
+  			...state,
+  			nbRestau: 0
+  		}
 
   	default:
   		return state;

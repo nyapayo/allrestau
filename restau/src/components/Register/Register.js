@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../Header/Header';
 import './Register.css';
 import { Link } from 'react-router-dom';
 
