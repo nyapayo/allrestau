@@ -29,7 +29,28 @@ router.post('/loginrestaurant', (req, res, next) => {
 	let form = new formidable.IncomingForm();
 
 	form.parse(req, (err, fields, files) => {
-		
+		if (!err) {
+			const {email, password} = fields;
+
+			// Check if email is empty
+			if (!email) {
+				res.status(200).json({email, password, emailEmpty: 'Email empty'});
+			}
+			// check if password is empty
+			if (!password) {
+				res.status(200).json({email, password, passwordEmpty: 'Password empty'});
+			}
+
+			// Every thing is good
+			// Then check for user
+			if (true) {
+				// return all user data
+				res.status(200).json({id: 5, email, password, phone: '+237676615300', name: 'Saveur Africaine'});
+			} else {
+				res.status(200).json({email, password, error: 'Bad email or password'});
+			}
+		}
+
 	});
 });
 

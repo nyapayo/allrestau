@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './AppInfo.css';
 import { connect } from 'react-redux';
 import { getNumberRestaurant } from '../../actions';
 
 const AppInfo = props => {	
-	const [nbRestau, setNbrestau] = useState(0);
 	useEffect(() => {
 		
 		// props.getNumberRestaurant();
